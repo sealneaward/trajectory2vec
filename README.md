@@ -7,7 +7,7 @@ simulation in "Trajectory clustering via deep representation learning"
 Tensorflow = 1.0+,
 pandas = `*`,
 sklearn = `*`,
-traj_dist =  https://github.com/sealneaward/trajectory_distance
+traj_dist =  [current version](https://github.com/sealneaward/trajectory_distance)
 
 
 ## Useage:

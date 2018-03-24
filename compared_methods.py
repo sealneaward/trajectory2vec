@@ -45,8 +45,9 @@ def combainDistances(inputPath = './distance_compution/DTW_distance/'):
     files = os.listdir(inputPath)
     files_index = []
     for fn in files:
-        i = int(fn.split('_')[2])
-        files_index.append((fn,i))
+        if fn != '.gitkeep':
+            i = int(fn.split('_')[2])
+            files_index.append((fn,i))
     files_index.sort(key=lambda x:x[1])
     distances = []
     for fn in files_index:
