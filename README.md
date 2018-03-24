@@ -4,18 +4,18 @@ simulation in "Trajectory clustering via deep representation learning"
 
 ## Required Packages:
 
-Tensorflow = 0.11.0rc0, 
-pandas = 0.19.0, 
-sklearn = 0.17.1
-traj_dist =  https://github.com/maikol-solis/trajectory_distance
+Tensorflow = 1.0+,
+pandas = `*`,
+sklearn = `*`,
+traj_dist =  https://github.com/sealneaward/trajectory_distance
 
 
 ## Useage:
-### simulate_data.py: 
+### simulate_data.py:
 Generating the synthetic trajectories 'sim_trajectories' in /simulated_data/.
 Here, we only generate 30 trajectories as the sample.
-### tmb2vec.py: 
-Embed each trajectory to a fixed-length vector utiziling our framework. 
+### tmb2vec.py:
+Embed each trajectory to a fixed-length vector utiziling our framework.
 Five files is generated in /simulated_data/
 * sim_trajectories_complete : Trajectories after attributes completion.
 * sim_trajectories_feas : Elementary features computed by each pair of continuous records

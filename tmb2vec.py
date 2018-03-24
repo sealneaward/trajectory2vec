@@ -192,18 +192,17 @@ def trajectory2Vec():
 
     useful_input = seq_input[0:input_length[0]]
     loss_inputs = [tf.reshape(useful_input, [-1])]
-    encoder_inputs = [item for item in tf.unpack(seq_input)]
+    encoder_inputs = [item for item in tf.unstack(seq_input)]
     # if encoder input is "X, Y, Z", then decoder input is "0, X, Y, Z". Therefore, the decoder size
     # and target size equal encoder size plus 1. For simplicity, here I droped the last one.
     decoder_inputs = ([tf.zeros_like(encoder_inputs[0], name="GO")] + encoder_inputs[:-1])
     targets = encoder_inputs
 
     # basic LSTM seq2seq model
-    cell = tf.nn.rnn_cell.LSTMCell(size, state_is_tuple=True, use_peepholes=True)
-    _, enc_state = tf.nn.rnn(cell, encoder_inputs, sequence_length=input_length[0], dtype=tf.float32)
-    cell = tf.nn.rnn_cell.OutputProjectionWrapper(cell, frame_dim)
-    dec_outputs, dec_state = tf.nn.seq2seq.rnn_decoder(decoder_inputs, enc_state, cell, loop_function=loopf)
-
+    cell = tf.nn.rnn_cell.BasicLSTMCell(size, state_is_tuple=True)
+    _, enc_state = tf.contrib.rnn.static_rnn(cell, encoder_inputs, dtype=tf.float32)
+    cell = tf.contrib.rnn.OutputProjectionWrapper(cell, frame_dim)
+    dec_outputs, dec_state = tf.contrib.legacy_seq2seq.rnn_decoder(decoder_inputs, enc_state, cell, loop_function=loopf)
 
     # flatten the prediction and target to compute squared error loss
     y_true = [tf.reshape(encoder_input, [-1]) for encoder_input in encoder_inputs]
@@ -212,7 +211,7 @@ def trajectory2Vec():
     # Define loss and optimizer, minimize the squared error
     loss = 0
     for i in range(len(loss_inputs)):
-        loss += tf.reduce_sum(tf.square(tf.sub(y_pred[i], y_true[len(loss_inputs) - i - 1])))
+        loss += tf.reduce_sum(tf.square(tf.subtract(y_pred[i], y_true[len(loss_inputs) - i - 1])))
     optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(loss)
 
     # Initializing the variables
